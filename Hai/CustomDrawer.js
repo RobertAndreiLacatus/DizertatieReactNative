@@ -32,6 +32,9 @@ const CustomDrawer = ({navigation,props}) => {
         <Text style={styles.menuItem} onPress={() => navigation.navigate('Contact')}>
           Contact Us
         </Text>
+        <Text style={styles.menuItem} onPress={() => navigation.navigate('LogOut')}>
+          LogOut
+        </Text>
        
       </View>
       </DrawerContentScrollView>

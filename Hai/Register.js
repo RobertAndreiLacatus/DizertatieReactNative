@@ -6,11 +6,11 @@ import Travel from './assets/travel.png'
 import { Title } from 'react-native-paper';
 
 
-export default function ContactUs() {
+export default function Register() {
 
     const navigation = useNavigation();
-    const handleBlogs=()=>{
-        navigation.navigate('Home')
+    const handleRegister=()=>{
+        navigation.navigate('LogOut')
       }
 
       
@@ -23,13 +23,15 @@ export default function ContactUs() {
         
         const userRef=useRef(null);
         const emailRef=useRef(null);
-        const problemRef= useRef(null);
+        const passRef= useRef(null);
+        const phoneRef= useRef(null);
 
         const onPressLogin = () => {
-          if (userRef.current && emailRef.current && problemRef.current) {
+          if (userRef.current && emailRef.current && passRef.current && phoneRef.current) {
             userRef.current.clear();
             emailRef.current.clear();
-            problemRef.current.clear();
+            passRef.current.clear();
+            phoneRef.current.clear();
           } else {
             Alert.alert("No");
           }
@@ -63,9 +65,21 @@ export default function ContactUs() {
           <View style={styles.inputView}>
             <TextInput
               style={styles.inputText}
-              placeholder="Problem"
+              secureTextEntry
+              placeholder="Password"
               placeholderTextColor="#003f5c"
-              ref={problemRef}
+              ref={passRef}
+
+            />
+          </View>
+
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              secureTextEntry
+              placeholder="Phone Number"
+              placeholderTextColor="#003f5c"
+              ref={phoneRef}
 
             />
           </View>
@@ -74,7 +88,10 @@ export default function ContactUs() {
        
             </View>
               <TouchableOpacity onPress={onPressLogin} style={styles.loginBtn}>
-                <Text style={styles.loginText}>Send </Text>
+                <Text style={styles.loginText}>Create </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleRegister} style={styles.loginBtn}>
+                <Text style={styles.loginText}>Back to Login </Text>
               </TouchableOpacity>
           {/* <TouchableOpacity onPress={onPressForgotPassword}>
             <Text style={styles.forgotAndSignUpText}>Forgot Password?</Text>
