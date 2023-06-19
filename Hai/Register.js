@@ -4,13 +4,48 @@ import { TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import Travel from './assets/travel.png'
 import { Title } from 'react-native-paper';
+import axios from 'axios'
 
 
 export default function Register() {
 
     const navigation = useNavigation();
+    const userRef=useRef(null);
+    const emailRef=useRef(null);
+    const passRef= useRef(null);
+    const phoneRef= useRef(null);
     const handleRegister=()=>{
-        navigation.navigate('LogOut')
+        // navigation.navigate('LogOut')
+        const username=userRef.current?.value;
+        const email=emailRef.current?.value;
+        const password=passRef.current?.value;
+        const phoneNumber=phoneRef.current?.value;
+        const data={
+          "username":username,
+          "password":password,
+          "email":email,
+          "phone":phoneNumber
+        }
+        
+        if (username && email && password && phoneNumber){
+          //Send a POST request to my Flask API endpoint
+          axios.post(API_URL + '/register',data)
+          .then(response =>{
+            //Handle the response from the server
+            //For example, show a success message or navigate
+            setDisplayMessage(response.data.message)
+            navigation.navigate('LogOut');
+          })
+          .catch(error=>{
+            //Handle the error from the server
+            //For example, show an error message
+            console.error(error);
+          });
+
+        }else{
+          Alert.alert('Please, fill in all the fields')
+        }
+        
       }
 
       
@@ -21,19 +56,23 @@ export default function Register() {
         // Do something about signup operation
         };
         
-        const userRef=useRef(null);
-        const emailRef=useRef(null);
-        const passRef= useRef(null);
-        const phoneRef= useRef(null);
+        
 
-        const onPressLogin = () => {
-          if (userRef.current && emailRef.current && passRef.current && phoneRef.current) {
-            userRef.current.clear();
-            emailRef.current.clear();
-            passRef.current.clear();
-            phoneRef.current.clear();
+        
+
+        const onRegister = () => {
+          if (
+            userRef.current &&
+            emailRef.current &&
+            passRef.current &&
+            phoneRef.current
+          ) {
+            userRef.current.value = '';
+            emailRef.current.value = '';
+            passRef.current.value = '';
+            phoneRef.current.value = '';
           } else {
-            Alert.alert("No");
+            Alert.alert('No');
           }
         };
         
@@ -42,7 +81,7 @@ export default function Register() {
 
       return (
         <View style={styles.container}>
-          <Text style={styles.title}> Contact Us</Text>
+          <Text style={styles.title}> Register Please</Text>
           <View style={styles.inputView}>
             <TextInput
               style={styles.inputText}
@@ -76,7 +115,7 @@ export default function Register() {
           <View style={styles.inputView}>
             <TextInput
               style={styles.inputText}
-              secureTextEntry
+              
               placeholder="Phone Number"
               placeholderTextColor="#003f5c"
               ref={phoneRef}
@@ -87,7 +126,7 @@ export default function Register() {
                   <Text style={styles.footerText}>@ Lacatus Robert</Text>
        
             </View>
-              <TouchableOpacity onPress={onPressLogin} style={styles.loginBtn}>
+              <TouchableOpacity onPress={handleRegister} style={styles.loginBtn}>
                 <Text style={styles.loginText}>Create </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={handleRegister} style={styles.loginBtn}>
