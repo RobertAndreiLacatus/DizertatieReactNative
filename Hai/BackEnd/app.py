@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 import pymongo
 from pymongo import MongoClient
 
@@ -11,14 +11,11 @@ cluster = MongoClient("mongodb+srv://newR:123@cluster0.qn2heje.mongodb.net/?retr
 db = cluster["Thesis"]
 collection = db["Register"]
 
-
 @app.route('/', methods=['GET'])
-@cross_origin()
 def home():
     return jsonify({'message': 'HOME'})
 
-@app.route('/login', methods=['GET','POST'])
-@cross_origin()
+@app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     user = data['user']
@@ -29,32 +26,27 @@ def login():
     else:
         return jsonify({'message': 'Invalid credentials'}), 404
 
-
-@app.route('/register',methods=['POST'])
-@cross_origin
+@app.route('/register', methods=['POST'])
 def register():
-    data=request.get_json()
-    username=data['username']
-    password=data['password']
-    email=data['email']
-    phone=data['phone']
-    
-  
-    #Insert the user data into the database
-    accountUser={
-        "username":username,
-        "password":password,
-        "email":email,
-        "phone":phone
-        
+    data = request.get_json()
+    username = data['username']
+    password = data['password']
+    email = data['email']
+    phone = data['phone']
+
+    # Insert the user data into the database
+    accountUser = {
+        "username": username,
+        "password": password,
+        "email": email,
+        "phone": phone
     }
-    
-    collection.insert_one(accountUser)
-    
-    return jsonify({'message':'Registration successful'})
 
-    
-
+    if username and password and email and phone:
+        collection.insert_one(accountUser)
+        return jsonify({'message': 'Registration successful'})
+    else:
+        return jsonify({'message': 'Registration failed'})
 
 if __name__ == '__main__':
     app.run()
