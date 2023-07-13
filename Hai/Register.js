@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -6,35 +6,45 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  ScrollView
+  
 } from 'react-native';
+import {Picker} from '@react-native-picker/picker'
 import axios from 'axios';
+import { API_URL } from './HttpService';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Register() {
-  const userRef = useRef(null);
-  const emailRef = useRef(null);
-  const passRef = useRef(null);
-  const phoneRef = useRef(null);
 
-  const handleRegister = () => {
-    const username = userRef.current?.value;
-    const email = emailRef.current?.value;
-    const password = passRef.current?.value;
-    const phoneNumber = phoneRef.current?.value;
-    const data = {
-      username: username,
-      password: password,
-      email: email,
-      phone: phoneNumber,
+  const navigation = useNavigation();
+  
+  const [selectedOption, setSelectedOption]=useState('Host');
+  const [username, setUser] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+
+  const handleRegister =  () => {
+   
+    var data = {
+      'username': username,
+      'password': password,
+      'email': email,
+      'phone': phone,
+      'selectedOption':selectedOption,
     };
 
-    if (username && email && password && phoneNumber) {
+    
+    if (phone && username && password && email) {
       // Send a POST request to the Flask API endpoint
       axios
-        .post('http://localhost:5000/register', data)
-        .then((response) => {
+        .post(API_URL + '/register', data)
+        .then( (response) => {
           // Handle the response from the server
           // For example, show a success message or navigate
           Alert.alert(response.data.message);
+          onRegister()
+          navigation.navigate('LogOut')
         })
         .catch((error) => {
           // Handle the error from the server
@@ -47,22 +57,16 @@ export default function Register() {
   };
 
   const onRegister = () => {
-    if (
-      userRef.current &&
-      emailRef.current &&
-      passRef.current &&
-      phoneRef.current
-    ) {
-      userRef.current.value = '';
-      emailRef.current.value = '';
-      passRef.current.value = '';
-      phoneRef.current.value = '';
-    } else {
-      Alert.alert('No');
-    }
+    setUser('');
+    setEmail('');
+    setPassword('');
+    setPhone('');
+
   };
+  
 
   return (
+    <ScrollView>
     <View style={styles.container}>
       <Text style={styles.title}>Register Please</Text>
       <View style={styles.inputView}>
@@ -70,7 +74,7 @@ export default function Register() {
           style={styles.inputText}
           placeholder="Name"
           placeholderTextColor="#003f5c"
-          ref={userRef}
+          onChangeText={setUser}
         />
       </View>
       <View style={styles.inputView}>
@@ -78,7 +82,7 @@ export default function Register() {
           style={styles.inputText}
           placeholder="E-mail"
           placeholderTextColor="#003f5c"
-          ref={emailRef}
+          onChangeText={setEmail}
         />
       </View>
       <View style={styles.inputView}>
@@ -87,7 +91,7 @@ export default function Register() {
           secureTextEntry
           placeholder="Password"
           placeholderTextColor="#003f5c"
-          ref={passRef}
+          onChangeText={setPassword}
         />
       </View>
       <View style={styles.inputView}>
@@ -95,9 +99,19 @@ export default function Register() {
           style={styles.inputText}
           placeholder="Phone Number"
           placeholderTextColor="#003f5c"
-          ref={phoneRef}
+          onChangeText={setPhone}
         />
       </View>
+      <View style={styles.inputChose}>
+         <Picker
+            selectedValue={selectedOption}
+            onValueChange={(itemValue) => setSelectedOption(itemValue)}
+          >
+            <Picker.Item label="Host" value="Host" />
+            <Picker.Item label="Guest" value="Guest" />
+          </Picker>
+      </View>
+
       <TouchableOpacity onPress={handleRegister} style={styles.loginBtn}>
         <Text style={styles.loginText}>Create</Text>
       </TouchableOpacity>
@@ -105,6 +119,7 @@ export default function Register() {
         <Text style={styles.loginText}>Back to Login</Text>
       </TouchableOpacity>
     </View>
+    </ScrollView>
   );
 }
 
@@ -112,8 +127,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#BE93D4',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignContent:'center',
+    alignItems:'center',
+    
   },
   title: {
     fontWeight: 'bold',
@@ -141,7 +157,21 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 40,
-    marginBottom: 10,
+    marginTop: 30,
+    marginBottom: 30,
   },
+
+  inputChose: {
+    width: '40%',
+    alignSelf: 'center',
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    paddingHorizontal: 3,
+    paddingVertical: 3,
+    borderWidth: 1,
+    borderColor: '#d3d3d3',
+    
+   
+  },
+  
 });

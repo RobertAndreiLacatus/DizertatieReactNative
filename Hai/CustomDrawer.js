@@ -1,7 +1,7 @@
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 import { ImageBackground } from 'react-native';
 import Back from './assets/back.png'
 import Profile from './assets/profile.png'

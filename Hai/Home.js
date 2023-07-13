@@ -6,9 +6,10 @@ import { useNavigation } from '@react-navigation/native';
 
 
 
+
 const Home=() =>{
   
-  const video=React.useRef(null);
+  
   
   const navigation = useNavigation();
   const handle=()=>{
@@ -16,6 +17,7 @@ const Home=() =>{
   }
  
   return (
+    
     <View style={styles.container}>
        
       <ScrollView>
@@ -36,6 +38,7 @@ const Home=() =>{
       </View>
       
     </View>
+   
       
   )
 }

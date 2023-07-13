@@ -5,14 +5,18 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios'
 import {API_URL} from './HttpService'
 import Register from './Register'
+import {Picker} from '@react-native-picker/picker'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 
 export default function LogIn() {
-
+    
     const navigation = useNavigation();
     const handleBlogs = () => {
+        
         console.log("handleBlogs")
-        //     navigation.navigate('Home')
+        navigation.navigate('Home')
     }
     const handleCreateAccount = () => {
         console.log("handleCreateAccount")
@@ -26,7 +30,13 @@ export default function LogIn() {
     const onPressSignUp = () => {
         // Do something about signup operation
     };
-    const [user, setUser] = useState('');
+
+    // To get the value from the TextInput
+    const [textInputValue, setTextInputValue] = useState('');
+  // To set the value on Text
+    const [getValue, setGetValue] = useState('');
+    const [selectedOption, setSelectedOption]=useState('Host');
+    const [username, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [displayMessage, setDisplayMessage] = useState('');
 
@@ -39,10 +49,15 @@ export default function LogIn() {
     //     Alert.alert("No")
     //   }
     //   };
+
+    
+    
     const onPressLogin = () => {
         const data = {
-            "user": user,
+            "username": username,
             "password": password,
+            "selectedOption":selectedOption,
+            
         };
         console.log("DATA", data)
         axios
@@ -50,6 +65,26 @@ export default function LogIn() {
             .then(response => {
                 console.log(response.data);
                 setDisplayMessage(response.data.message)
+
+                if (response.data.success) {
+                    setUser(response.data.username);
+                }
+                
+                if (selectedOption ==="Guest"){
+                    navigation.navigate('FirstGuest')
+                }
+                else if (selectedOption === "Host"){
+                    navigation.navigate('FirstHost',{ username: username })
+                    
+                    
+                }
+                else{
+                    setDisplayMessage(response.data.message)
+                }
+                
+               
+                    
+
                 // Handle successful login
             })
             .catch(error => {
@@ -59,8 +94,10 @@ export default function LogIn() {
             });
     };
 
+   
 
     return (
+        <ScrollView>
         <View style={styles.container}>
             <Text style={styles.title}> Traveller</Text>
             <Text style={styles.title}> {displayMessage} </Text>
@@ -83,6 +120,15 @@ export default function LogIn() {
 
                 />
             </View>
+            <View style={styles.inputChose}>
+                <Picker
+                    selectedValue={selectedOption}
+                    onValueChange={(itemValue) => setSelectedOption(itemValue)}
+                >
+                    <Picker.Item label="Host" value="Host" />
+                    <Picker.Item label="Guest" value="Guest" />
+                </Picker>
+            </View>
             <TouchableOpacity onPress={onPressForgotPassword}>
                 <Text style={styles.forgotAndSignUpText}>Forgot Password?</Text>
             </TouchableOpacity>
@@ -93,6 +139,8 @@ export default function LogIn() {
                 <Text style={styles.forgotAndSignUpText}>Signup</Text>
             </TouchableOpacity>
         </View>
+        </ScrollView>
+        
     );
 }
 
@@ -129,7 +177,8 @@ const styles = StyleSheet.create({
     },
     forgotAndSignUpText: {
         color: "white",
-        fontSize: 11
+        fontSize: 11,
+        bottom:20
     },
     loginBtn: {
         width: "80%",
@@ -139,6 +188,18 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginTop: 40,
-        marginBottom: 10
+        marginBottom: 30
     },
+    inputChose: {
+        width: '40%',
+        alignSelf: 'center',
+        backgroundColor: '#ffffff',
+        borderRadius: 8,
+        paddingHorizontal: 3,
+        paddingVertical: 3,
+        borderWidth: 1,
+        borderColor: '#d3d3d3',
+        
+       
+      },
 });
