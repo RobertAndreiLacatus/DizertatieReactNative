@@ -100,10 +100,11 @@ def getCards():
     return jsonify(cards=cards_list)    
 
 
-@app.route('/search', methods=['GET'])
+@app.route('/search', methods=['POST'])
 def search():
-    query = request.args.get('query')  # Retrieve the search query from the request query parameters
-
+    data = request.get_json()
+    query = data['searchQuery'] # Retrieve the search query from the request query parameters
+    
     # Perform the search in the MongoDB database
     results = collection_cards.find({'location': {'$regex': query, '$options': 'i'}})
 

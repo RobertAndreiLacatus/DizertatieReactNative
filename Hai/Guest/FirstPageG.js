@@ -20,18 +20,18 @@ import axios from 'axios';
 export default function FirstPageG() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [location,setLocation]=useState();
 
   const handleSearch = () => {
     const data = {
       searchQuery: searchQuery,
-      location:location
     };
+
+    console.log("DATA", data)
 
     axios
       .post(API_URL + '/search', data)
       .then((response) => {
-        setSearchResults(response.data.results);
+        setSearchResults(response.data);
       })
       .catch((error) => {
         console.log('Error occurred during search:', error);
