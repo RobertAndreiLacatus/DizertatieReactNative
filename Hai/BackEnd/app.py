@@ -12,6 +12,7 @@ cluster = MongoClient("mongodb+srv://newR:123@cluster0.qn2heje.mongodb.net/?retr
 db = cluster["Thesis"]
 collection = db["Register"]
 collection_cards = db["Cards"]
+collection_cardInfo=db["CardInfo"]
 
 @app.route('/', methods=['GET'])
 def home():
@@ -107,10 +108,11 @@ def search():
     
     # Perform the search in the MongoDB database
     results = collection_cards.find({'location': {'$regex': query, '$options': 'i'}})
-
+    print('the cardf was found')
     # Format the search results as a list of dictionaries
     search_results = []
     for document in results:
+        print('card'+document['title'])
         card = {
             "title": document['title'],
             "description": document['description'],
@@ -121,6 +123,75 @@ def search():
         search_results.append(card)
 
     return jsonify(search_results)  # Return the search results directly as an array
+
+
+@app.route('/templateUser', methods=['POST'])
+def addInfo():
+    data = request.get_json()
+    title = data['title']
+    description = data['description']
+    image = data['image']
+    inboxText=data['inboxText']
+    inboxText1=data['inboxText1']
+    inboxText2=data['inboxText2']
+    detailsText=data['detailsText']
+    detailsText1=data['detailsText1']
+    detailsText2=data['detailsText2']
+    detailsText3=data['detailsText3']
+    descriptionB=data['descriptionB']
+
+    infoPage = {
+        "title": title,
+        "description": description,
+        "image": image,
+        "inboxText":inboxText,
+        "inboxText1":inboxText1,
+        "inboxText2":inboxText2,
+        "detailsText":detailsText,
+        "detailsText1":detailsText1,
+        "detailsText2":detailsText2,
+        "detailsText3":detailsText3,
+        "descriptionB":descriptionB,
+        
+    }
+
+    try:
+        collection_cardInfo.insert_one(infoPage)
+        return jsonify({'message': 'InfoPage successfully added'})
+    except:
+        return jsonify({'message': 'InfoPage failed to add'})
+    
+    
+@app.route('/searchInfo', methods=['POST'])
+def searchInfo():
+    data = request.get_json()
+    query = data['searchQuery']
+
+    # Perform the search in the MongoDB database with the provided title query
+    results = collection_cardInfo.find({'title': {'$regex': query, '$options': 'i'}})
+    print('the data was found')
+    
+    # Format the search results as a list of dictionaries
+    search_results = []
+    for document in results:
+        print(document['title'])
+        cardInfoPage = {
+            "title": document['title'],
+            "description": document['description'],
+            "image": document['image'],
+            "inboxText": document['inboxText'],
+            "inboxText1": document['inboxText1'],
+            "inboxText2": document['inboxText2'],
+            "detailsText": document['detailsText'],
+            "detailsText1": document['detailsText1'],
+            "detailsText2": document['detailsText2'],
+            "detailsText3": document['detailsText3'],
+            "descriptionB": document['descriptionB']
+        }
+        search_results.append(cardInfoPage)
+
+    return jsonify(search_results)  # Return the search results directly as an array
+ # Return the search results directly as an array  # Return the search results directly as an array    
 
 if __name__ == '__main__':
     app.run()
