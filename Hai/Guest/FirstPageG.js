@@ -10,18 +10,22 @@ import {
   TouchableOpacity,
   TextInput,
   Modal,
+  Button
 } from 'react-native';
 import { SearchBar } from '@rneui/themed';
-import CardE from '../Card';
+import CardGuest from './CardGuest';
 import Lisbon2 from '../assets/lisbon.png';
 import { API_URL } from '../HttpService';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import CardPageG from './CardPageG';
 
 export default function FirstPageG() {
+  const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
-  const handleSearch = () => {
+  const handleSearchInfo = () => {
     const data = {
       searchQuery: searchQuery,
     };
@@ -38,6 +42,10 @@ export default function FirstPageG() {
       });
   };
 
+  const navigateInfo=() =>{
+    navigation.navigate('Blog')
+}
+
   return (
     <ScrollView style={styles.container}>
       <View>
@@ -53,21 +61,32 @@ export default function FirstPageG() {
         onChangeText={(text) => setSearchQuery(text)}
         containerStyle={styles.searchBar}
         inputStyle={styles.searchBarInput}
-        onSubmitEditing={handleSearch}
+        onSubmitEditing={handleSearchInfo}
       />
-      <TouchableOpacity onPress={handleSearch} >
-        <Text >Press</Text>
+      <TouchableOpacity style={styles.blogBTN} onPress={navigateInfo}>
+        <Text>Go to Blog</Text>
       </TouchableOpacity>
+      
       {/* Render the search results */}
       {searchResults.map((result, index) => (
-        <CardE
+        
+        <CardGuest 
           key={index}
           title={result.title}
           description={result.description}
           poza={result.image}
-          page={result.location}
+          page={'TemplateG'}
+          
+          
         />
-      ))}
+      
+        
+        
+       
+      )
+      
+      )}
+      
     </ScrollView>
   );
 }
@@ -100,4 +119,15 @@ const styles = StyleSheet.create({
   searchBarInput: {
     color: '#FFFFFF',
   },
+  blogBTN: {
+    width: "30%",
+    backgroundColor: "#fb5b5a",
+    borderRadius: 25,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    bottom: 155,
+    left:110
+    
+},
 });
