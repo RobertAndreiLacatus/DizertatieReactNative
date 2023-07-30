@@ -8,6 +8,8 @@ import Register from './Register.js'
 import FirstPageHost from './Host/FirstPageH.js'
 import FirstPageG from './Guest/FirstPageG.js'
 import TemplateH from './Host/TemplatePage.js'
+import CardPageG from './Guest/CardPageG.js'
+import BlogCreate from './CreateBlog.js'
 
 
 
@@ -27,8 +29,8 @@ const AuthStack =()=>{
           <Drawer.Screen name='FirstHost' component={FirstPageHost}/>
           <Drawer.Screen name='FirstGuest' component={FirstPageG}/>
           <Drawer.Screen name='TemplateH' component={TemplateH}/>
-          
-          
+          <Drawer.Screen name='TemplateG' component={CardPageG}/>
+          <Drawer.Screen name='CreateCard' component={BlogCreate}/>
         </Drawer.Navigator>
     )
 }

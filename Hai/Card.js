@@ -12,7 +12,7 @@ const CardE = ({props,title, description, poza, page }) => {
         navigation.navigate(page)
       }
     return(
-         
+        
         <Card style={Styles.container}>
         <Card.Content>
             <Title style={Styles.title}>{title}</Title>
@@ -27,6 +27,7 @@ const CardE = ({props,title, description, poza, page }) => {
             </TouchableOpacity>
         </Card.Actions>
       </Card>
+      
          
     );
   
