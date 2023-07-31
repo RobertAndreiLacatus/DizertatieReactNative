@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, Image,Button,TextInput, ScrollView,StyleSheet, ImageBackground} from 'react-native'
+import { View, Text, SafeAreaView,Alert, Image,Button,TextInput, ScrollView,StyleSheet, ImageBackground} from 'react-native'
 import React from 'react'
 import CardE from './Card'
 import Lisbon2 from './assets/lisbon.png'
@@ -13,6 +13,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
+import { API_URL } from './HttpService';
 
 
 
@@ -23,6 +25,42 @@ export default function BlogCreate() {
     const [title, setTitle]=useState('');
     const [description, setDescription]=useState('');
     const [imageSource, setImageSource] = useState(null);
+
+
+
+    const handleInfoBlog = () =>{
+      var data={
+        'title':title,
+        'description':description,
+        'imageSource':imageSource
+      }
+
+
+      if (title && description && imageSource) {
+        axios 
+        .post(API_URL + '/infoBlog', data)
+        .then((response)=>{
+          Alert.alert(response.data.message);
+          onInfo()
+          navigation.navigate('Blog')
+          
+        })
+        .catch((error)=>{
+          console.error(error);
+        });
+
+      }else{
+        Alert.alert('Please fill in all the fields')
+      }
+    }
+
+    const onInfo =()=>{
+      setTitle('');
+      setDescription('');
+      setImageSource(null);
+    }
+
+    
     
     const handleSelectPhoto =  async () => {
         const options = {
@@ -36,7 +74,7 @@ export default function BlogCreate() {
             const response = await ImagePicker.launchImageLibraryAsync(options);
             if (!response.cancelled) {
               console.log("RESPONSE URI IMAGE", response.assets[0].uri)
-              setCardImage(response.assets[0].uri);
+              setImageSource(response.assets[0].uri);
             }
           } catch (error) {
             console.log('Image picker error:', error);
@@ -66,7 +104,12 @@ export default function BlogCreate() {
                         source={{ uri: imageSource }}
                         style={style.selectedImage}
                         />
+
+                        <TouchableOpacity onPress={handleInfoBlog} style={style.btnStyle}>
+                            <Text>Save the info</Text>
+                        </TouchableOpacity>
                 </View>
+                
                
             
             </ScrollView>
@@ -123,6 +166,14 @@ const style=StyleSheet.create(
         height: 200,
         marginBottom: 20,
       },
+
+    btnStyle:{
+        width:100,
+        height:30,
+        bottom:20,
+        backgroundColor:'orange',
+        borderRadius:35
+    },
 
       
    }

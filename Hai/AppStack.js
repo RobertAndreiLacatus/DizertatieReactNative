@@ -30,7 +30,7 @@ const AuthStack =()=>{
           <Drawer.Screen name='FirstGuest' component={FirstPageG}/>
           <Drawer.Screen name='TemplateH' component={TemplateH}/>
           <Drawer.Screen name='TemplateG' component={CardPageG}/>
-          <Drawer.Screen name='CreateCard' component={BlogCreate}/>
+          <Drawer.Screen name='CreateBlog' component={BlogCreate}/>
         </Drawer.Navigator>
     )
 }
