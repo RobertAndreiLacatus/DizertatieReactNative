@@ -25,12 +25,12 @@ import Bedroom from '../assets/bedroom.png'
 import Kitchen from '../assets/kitchen.png'
 import LivingRoom from '../assets/livingroom.png'
 import Balcony from '../assets/balcony.png'
+import MapG from '../MapG';
 
-export default function CardPageG() {
+export default function CardPageG( { route, navigation } ) {
   
-  const navigation = useNavigation();
-  const route = useRoute();
-  const [title, setTitle] = useState('');
+  const { title } = route.params;
+
   const [descriptionB, setDescriptionB] = useState('');
   const [inboxText, setInboxText]=useState('');
   const [inboxText1, setInboxText1]=useState('');
@@ -40,21 +40,25 @@ export default function CardPageG() {
   const [detailsText2,setDetailsText2] =useState('');
   const [detailsText3,setDetailsText3] =useState('');
   const [descriptionB1, setDescriptionB1]=useState('');
-  const [searchQuery, setSearchQuery]= useState('');
-  const [searchQuery1, setSearchQuery1]=useState([]);
 
   const handleSearch = () => {
     const data = {
-      searchQuery: searchQuery,
+      searchQuery: title,
     };
-
-    console.log("DATA", data)
 
     axios
       .post(API_URL + '/searchInfo', data)
       .then((response) => {
-        console.log('Data',data)
-        setSearchQuery1(response.data);
+        let info = response['data'][0]
+        setDescriptionB(info['description'])
+        setDescriptionB1(info['descriptionB'])
+        setInboxText(info['inboxText'])
+        setInboxText1(info['inboxText1'])
+        setInboxText2(info['inboxText2'])
+        setDetailsText(info['detailsText'])
+        setDetailsText1(info['detailsText1'])
+        setDetailsText2(info['detailsText2'])
+        setDetailsText3(info['detailsText3'])
       })
       .catch((error) => {
         console.log('Error occurred during search:', error);
@@ -97,7 +101,19 @@ export default function CardPageG() {
         <Image source={Line} style={styles.line3}/>
         <Text style={styles.describeBLD}> General Description</Text>
         <Text style={styles.describeBLD2}> {descriptionB1}</Text>
+        <Text style={styles.where}> Where is the apartament or hotel placed</Text>
+        
       </View>
+      <View style={styles.mapGG}>
+          <MapG/>
+      </View>
+      <View style={styles.mapGG}>
+          <MapG/>
+      </View>
+      <View style={styles.mapGG}>
+          <MapG/>
+      </View>
+        
       </View>
     </ScrollView>
   );
@@ -286,6 +302,20 @@ const styles = StyleSheet.create({
     marginLeft: 60,
     top:450
   },
+
+  where:{
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginLeft: 35,
+    top:550
+  },
+  mapGG:{
+    flex: 1,
+    width: '100%',
+    paddingTop: 300, // Adjust as needed
+    paddingHorizontal: 20, // Adjust as needed
+    paddingBottom: 20, // Adjust as needed
+  }
   
 
 

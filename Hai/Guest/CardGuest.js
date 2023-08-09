@@ -9,7 +9,7 @@ const CardGuest = ({title, description, image,page }) => {
   
     const navigation = useNavigation();
     const handleBlogs=()=>{
-        navigation.navigate(page)
+        navigation.navigate(page, { title: title })
       }
     return(
         
