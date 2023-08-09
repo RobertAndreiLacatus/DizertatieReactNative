@@ -13,6 +13,7 @@ db = cluster["Thesis"]
 collection = db["Register"]
 collection_cards = db["Cards"]
 collection_cardInfo=db["CardInfo"]
+collection_infoBlog=db["InfoBlog"]
 
 @app.route('/', methods=['GET'])
 def home():
@@ -192,6 +193,61 @@ def searchInfo():
 
     return jsonify(search_results)  # Return the search results directly as an array
  # Return the search results directly as an array  # Return the search results directly as an array    
+
+
+@app.route('/infoBlog', methods=['POST'])
+def infoBlog():
+    data = request.get_json()
+    title = data['title']
+    description = data['description']
+    imageSource = data['imageSource']
+
+    # Insert the user data into the database
+    blogInfo = {
+        "title": title,
+        "description": description,
+        "imageSource": imageSource,
+        
+    }
+    print(blogInfo)
+
+    if title and description and imageSource:
+        collection_infoBlog.insert_one(blogInfo)
+        return jsonify({'message': 'Information was inserted succesfully'})
+    else:
+        return jsonify({'message': 'Please, try again'})
+
+@app.route('/findBlog', methods=['POST'])
+def findBlog():
+    try:
+        # Preluați toate documentele din colecția "collection_infoBlog"
+        all_blogs = collection_infoBlog.find({})
+
+        # Lista pentru a stoca informațiile dorite pentru fiecare blog
+        blogs_list = []
+
+        # Iterați prin fiecare document din colecție
+        for blog in all_blogs:
+            # Preluăm câmpurile dorite pentru fiecare document și le adăugăm în lista "blogs_list"
+            blog_info = {
+                "title": blog["title"],
+                "description": blog["description"],
+                "imageSource": blog["imageSource"]
+            }
+            blogs_list.append(blog_info)
+
+        # Returnăm lista "blogs_list" către frontend ca un JSON array
+        return jsonify(blogs_list), 200
+
+    except Exception as e:
+        # Gestionăm excepțiile, le logăm și returnăm un mesaj de eroare
+        print('Eroare:', str(e))
+        return jsonify({'message': 'Eroare de server'}), 500
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run()
