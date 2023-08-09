@@ -15,6 +15,9 @@ import Balcony from '../assets/balcony.png'
 
 import axios from 'axios';
 import { API_URL } from '../HttpService';
+import MapG from '../MapG';
+
+
 
 
 
@@ -34,24 +37,12 @@ const TemplateH=() =>{
   const [detailsText3,setDetailsText3] =useState('');
   const [descriptionB, setDescriptionB]=useState('');
   const [place, setPlace] = useState('');
-  // const [region, setRegion] = useState({
-  //   latitude: 37.78825,  // Initial map center latitude
-  //   longitude: -122.4324,  // Initial map center longitude
-  //   latitudeDelta: 0.0922,  // Zoom level (latitude delta)
-  //   longitudeDelta: 0.0421,  // Zoom level (longitude delta)
-  // });
-    // Perform any necessary geocoding to get the latitude and longitude for the entered place
-  // const handleSearch = () => {
-  //   // You can use a geocoding API service like Google Maps Geocoding API or OpenCage Geocoding API
+  const [yourTouristicPlace1, setYourTouristicPlace1] = useState('');
+  const [yourTouristicPlace2, setYourTouristicPlace2] = useState('');
+  const [yourTouristicPlace3, setYourTouristicPlace3] = useState('');
+  const [yourLocation1, setYourLocation1] =useState('');
+  const [yourLocation2, setYourLocation2] =useState('');
 
-  //   // Once you have the latitude and longitude, update the region state to refresh the map
-  //   setRegion({
-  //     latitude: 41.3874,
-  //     longitude: 2.1686,
-  //     latitudeDelta: 0.0922,
-  //     longitudeDelta: 0.0421,
-  //   });
-  // };
 
   const handlePageInfo= ()=>{
 
@@ -202,10 +193,95 @@ const TemplateH=() =>{
               textAlignVertical="top"
       />
           
+          <View style={styles.mapG1}>
+              <Text style={styles.titleMap}>Please add coordinations to your place</Text>
+              <TextInput
+              style={styles.yourLocation1}
+              value={yourLocation1}
+              onChangeText={setYourLocation1}
+              placeholder="Coordinate 1"
+              placeholderTextColor="#999"
+              multiline
+              textAlignVertical="top"
+              />
+              <TextInput
+              style={styles.yourLocation2}
+              value={yourLocation2}
+              onChangeText={setYourLocation2}
+              placeholder="Coordinate 2"
+              placeholderTextColor="#999"
+              multiline
+              textAlignVertical="top"
+              />
+              <MapG/>
+              <TouchableOpacity  style={styles.placeBtn}>
+                  <Text> Add Your Place </Text>
+              </TouchableOpacity>
+          </View>
 
-         
+          
+
+
+          <View style={styles.mapG1}>
+              <Text style={styles.titleMap}>Move the second pin to highlight the place</Text>
+              <TextInput
+              style={styles.yourLocation1}
+              value={yourTouristicPlace1}
+              onChangeText={setYourTouristicPlace1}
+              placeholder="Title of the touristic place"
+              placeholderTextColor="#999"
+              multiline
+              textAlignVertical="top"
+              />
+              
+              <MapG/>
+              <TouchableOpacity  style={styles.placeBtn}>
+                  <Text> Add Your Place </Text>
+              </TouchableOpacity>
+          </View>
+
+          <View style={styles.mapG1}>
+              <Text style={styles.titleMap}>Move the second pin to highlight the place</Text>
+              <TextInput
+              style={styles.yourLocation1}
+              value={yourTouristicPlace3}
+              onChangeText={setYourTouristicPlace3}
+              placeholder="Title of the touristic place"
+              placeholderTextColor="#999"
+              multiline
+              textAlignVertical="top"
+              />
+              
+              <MapG/>
+              <TouchableOpacity  style={styles.placeBtn}>
+                  <Text> Add Your Place </Text>
+              </TouchableOpacity>
+          </View>
+
+          <View style={styles.mapG1}>
+              <Text style={styles.titleMap}>Move the second pin to highlight the place</Text>
+              <TextInput
+              style={styles.yourLocation1}
+              value={yourTouristicPlace2}
+              onChangeText={setYourTouristicPlace2}
+              placeholder="Title of the touristic place"
+              placeholderTextColor="#999"
+              multiline
+              textAlignVertical="top"
+              />
+              
+              <MapG/>
+              <TouchableOpacity  style={styles.placeBtn}>
+                  <Text> Add Your Place </Text>
+              </TouchableOpacity>
+          </View>
+
+   
+          
         </View>
         <Image source={Line} style={styles.line3}/>
+
+        
         
         
           <TouchableOpacity onPress={handlePageInfo} style={styles.doneBtn}>
@@ -404,7 +480,7 @@ const styles = StyleSheet.create({
   line3:{
     width:350,
     height:50,
-    bottom:3100
+    bottom:3120
   },
   line11:{
     width:350,
@@ -488,7 +564,61 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 30,
-    bottom: 2450,
+    bottom: 1200,
+  },
+  mapG1: {
+    flex: 1,
+    width: '100%',
+    paddingTop: 20, // Adjust as needed
+    paddingHorizontal: 20, // Adjust as needed
+    paddingBottom: 20, // Adjust as needed
+  },
+  titleMap: {
+    fontSize: 17,
+    color: 'white',
+    marginBottom: 10,
+  },
+  yourLocation1: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    borderWidth: 1,
+    borderColor: '#999',
+    padding: 20,
+    width: '100%',
+    height: 40,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  yourLocation2: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    borderWidth: 1,
+    borderColor: '#999',
+    padding: 20,
+    width: '100%',
+    height: 40,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  placeBtn: {
+    width: '100%',
+    backgroundColor: '#fb5b5a',
+    borderRadius: 25,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+
+  mapG2:{
+    flex:0.7,
+    width:'87%',
+    height:'10%',
+    left:35,
+    top:200
+    
   },
     
    
