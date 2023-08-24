@@ -140,6 +140,11 @@ def addInfo():
     detailsText2=data['detailsText2']
     detailsText3=data['detailsText3']
     descriptionB=data['descriptionB']
+    originLatitude=data['originLatitude']
+    originLongitude=data['originLongitude']
+    geocodedCoordinates=data['geocodedCoordinates']
+    geocodedCoordinates1=data['geocodedCoordinates1']
+    geocodedCoordinates2=data['geocodedCoordinates2']
 
     infoPage = {
         "title": title,
@@ -153,6 +158,11 @@ def addInfo():
         "detailsText2":detailsText2,
         "detailsText3":detailsText3,
         "descriptionB":descriptionB,
+        "originLatitude":originLatitude,
+        "originLongitude":originLongitude,
+        "geocodedCoordinates":geocodedCoordinates,
+        "geocodedCoordinates1":geocodedCoordinates1,
+        "geocodedCoordinates2":geocodedCoordinates2,
         
     }
 
@@ -187,7 +197,12 @@ def searchInfo():
             "detailsText1": document['detailsText1'],
             "detailsText2": document['detailsText2'],
             "detailsText3": document['detailsText3'],
-            "descriptionB": document['descriptionB']
+            "descriptionB": document['descriptionB'],
+            "originLatitude":document['originLatitude'],
+            "originLongitude":document['originLongitude'],
+            "geocodedCoordinates":document['geocodedCoordinates'],
+            "geocodedCoordinates1":document['geocodedCoordinates1'],
+            "geocodedCoordinates2":document['geocodedCoordinates2']
         }
         search_results.append(cardInfoPage)
 
