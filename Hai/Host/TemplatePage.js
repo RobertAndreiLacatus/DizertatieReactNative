@@ -16,6 +16,9 @@ import Balcony from '../assets/balcony.png'
 import axios from 'axios';
 import { API_URL } from '../HttpService';
 import MapG from '../MapG';
+import { GOOGLE_MAPS_KEY } from '@env';
+
+
 
 
 
@@ -27,6 +30,7 @@ const TemplateH=() =>{
   
   const navigation = useNavigation();
   const route=useRoute()
+  
   const {title,description,image} = route.params 
   const [inboxText, setInboxText] = useState('');
   const [inboxText1, setInboxText1] = useState('');
@@ -42,6 +46,118 @@ const TemplateH=() =>{
   const [yourTouristicPlace3, setYourTouristicPlace3] = useState('');
   const [yourLocation1, setYourLocation1] =useState('');
   const [yourLocation2, setYourLocation2] =useState('');
+  const [originLatitude, setOriginLatitude] =useState('');
+  const [originLongitude, setOriginLongitude] =useState('');
+  const [destLatitude, setDestLatitude] =useState('');
+  const [destLongitude, setDestLongitude] =useState('');
+  const [geocodedCoordinates, setGeocodedCoordinates] = useState(null);
+  const [geocodedCoordinates1, setGeocodedCoordinates1] = useState(null);
+  const [geocodedCoordinates2, setGeocodedCoordinates2] = useState(null);
+ 
+  const handleGeocodePlace = async () => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${yourTouristicPlace1}&key=${GOOGLE_MAPS_KEY}`
+      );
+
+      const { results } = response.data;
+
+      
+
+      if (results.length > 0) {
+        const location = results[0].geometry.location;
+        
+        setGeocodedCoordinates({
+          latitude: location.lat,
+          longitude: location.lng,
+        });
+      } else {
+        console.log('Place not found');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleGeocodePlace1 = async () => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${yourTouristicPlace2}&key=${GOOGLE_MAPS_KEY}`
+      );
+
+      const { results } = response.data;
+
+      
+
+      if (results.length > 0) {
+        const location = results[0].geometry.location;
+        
+        setGeocodedCoordinates1({
+          latitude: location.lat,
+          longitude: location.lng,
+        });
+      } else {
+        console.log('Place not found');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleGeocodePlace2 = async () => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${yourTouristicPlace3}&key=${GOOGLE_MAPS_KEY}`
+      );
+
+      const { results } = response.data;
+
+      
+
+      if (results.length > 0) {
+        const location = results[0].geometry.location;
+        
+        setGeocodedCoordinates2({
+          latitude: location.lat,
+          longitude: location.lng,
+        });
+      } else {
+        console.log('Place not found');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleMapUpdate = () => {
+    if (originLatitude && originLongitude && destLatitude && destLongitude) {
+      console.log('Updating coordinates:', {
+        originLatitude,
+        originLongitude,
+        destLatitude,
+        destLongitude,
+      });
+
+      const origin = {
+        latitude: parseFloat(originLatitude),
+        longitude: parseFloat(originLongitude),
+      };
+
+      const destination = {
+        latitude: parseFloat(destLatitude),
+        longitude: parseFloat(destLongitude),
+      };
+
+      // Call any validation checks if needed
+
+      // Update the states with parsed values
+      setOriginLatitude(origin.latitude);
+      setOriginLongitude(origin.longitude);
+      setDestLatitude(destination.latitude);
+      setDestLongitude(destination.longitude);
+    }
+  };
+
 
 
   const handlePageInfo= ()=>{
@@ -58,6 +174,20 @@ const TemplateH=() =>{
       'detailsText2':detailsText2,
       'detailsText3':detailsText3,
       'descriptionB':descriptionB,
+      'originLatitude':originLatitude,
+      'originLongitude':originLongitude,
+      'geocodedCoordinates':geocodedCoordinates,
+      'geocodedCoordinates1':geocodedCoordinates1,
+      'geocodedCoordinates2':geocodedCoordinates2,
+      // 'yourTouristicPlace1':yourTouristicPlace1,
+      // 'yourTouristicPlace2':yourTouristicPlace2,
+      // 'yourTouristicPlace3':yourTouristicPlace3,
+      // 'yourLocation1':yourLocation1,
+      // 'yourLocation2':yourLocation2,
+      // 'originLatitude':originLatitude,
+      // 'originLongitude':originLongitude,
+      // 'destLatitude':destLatitude,
+      // 'destLongitude':destLongitude
       
 
     };
@@ -71,7 +201,20 @@ const TemplateH=() =>{
       setDetailsText2('');
       setDetailsText3('');
       setDescriptionB('');
+      setYourTouristicPlace1('');
+      setYourTouristicPlace2('');
+      setYourTouristicPlace3('');
+      setYourLocation1('');
+      setYourLocation2('');
+      setOriginLatitude('');
+      setOriginLongitude('');
+      setDestLatitude('');
+      setDestLongitude('');
+      setOriginLatitude('');
+      setOriginLongitude('');
     };
+
+   
 
     if (data) {
       axios
@@ -90,7 +233,10 @@ const TemplateH=() =>{
     }
 
     
+    
   }
+
+
 
   
  
@@ -197,8 +343,8 @@ const TemplateH=() =>{
               <Text style={styles.titleMap}>Please add coordinations to your place</Text>
               <TextInput
               style={styles.yourLocation1}
-              value={yourLocation1}
-              onChangeText={setYourLocation1}
+              value={originLatitude}
+              onChangeText={setOriginLatitude}
               placeholder="Coordinate 1"
               placeholderTextColor="#999"
               multiline
@@ -206,15 +352,16 @@ const TemplateH=() =>{
               />
               <TextInput
               style={styles.yourLocation2}
-              value={yourLocation2}
-              onChangeText={setYourLocation2}
+              value={originLongitude}
+              onChangeText={setOriginLongitude}
               placeholder="Coordinate 2"
               placeholderTextColor="#999"
               multiline
               textAlignVertical="top"
               />
-              <MapG/>
-              <TouchableOpacity  style={styles.placeBtn}>
+              
+              <MapG origin={{latitude:originLatitude, longitude:originLongitude}} destination={{latitude:destLatitude, longitude:destLongitude}}/>
+              <TouchableOpacity  style={styles.placeBtn} onPress={handleMapUpdate}>
                   <Text> Add Your Place </Text>
               </TouchableOpacity>
           </View>
@@ -234,26 +381,8 @@ const TemplateH=() =>{
               textAlignVertical="top"
               />
               
-              <MapG/>
-              <TouchableOpacity  style={styles.placeBtn}>
-                  <Text> Add Your Place </Text>
-              </TouchableOpacity>
-          </View>
-
-          <View style={styles.mapG1}>
-              <Text style={styles.titleMap}>Move the second pin to highlight the place</Text>
-              <TextInput
-              style={styles.yourLocation1}
-              value={yourTouristicPlace3}
-              onChangeText={setYourTouristicPlace3}
-              placeholder="Title of the touristic place"
-              placeholderTextColor="#999"
-              multiline
-              textAlignVertical="top"
-              />
-              
-              <MapG/>
-              <TouchableOpacity  style={styles.placeBtn}>
+              <MapG origin={{latitude:originLatitude, longitude:originLongitude}} destination={geocodedCoordinates}/>
+              <TouchableOpacity  style={styles.placeBtn} onPress={handleGeocodePlace}>
                   <Text> Add Your Place </Text>
               </TouchableOpacity>
           </View>
@@ -270,8 +399,26 @@ const TemplateH=() =>{
               textAlignVertical="top"
               />
               
-              <MapG/>
-              <TouchableOpacity  style={styles.placeBtn}>
+              <MapG origin={{latitude:originLatitude, longitude:originLongitude}} destination={geocodedCoordinates1}/>
+              <TouchableOpacity  style={styles.placeBtn} onPress={handleGeocodePlace1}>
+                  <Text> Add Your Place </Text>
+              </TouchableOpacity>
+          </View>
+
+          <View style={styles.mapG1}>
+              <Text style={styles.titleMap}>Move the second pin to highlight the place</Text>
+              <TextInput
+              style={styles.yourLocation1}
+              value={yourTouristicPlace3}
+              onChangeText={setYourTouristicPlace3}
+              placeholder="Title of the touristic place"
+              placeholderTextColor="#999"
+              multiline
+              textAlignVertical="top"
+              />
+              
+              <MapG origin={{latitude:originLatitude, longitude:originLongitude}} destination={geocodedCoordinates2}/>
+              <TouchableOpacity  style={styles.placeBtn} onPress={handleGeocodePlace2}>
                   <Text> Add Your Place </Text>
               </TouchableOpacity>
           </View>
