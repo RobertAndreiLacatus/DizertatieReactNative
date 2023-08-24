@@ -40,6 +40,23 @@ export default function CardPageG( { route, navigation } ) {
   const [detailsText2,setDetailsText2] =useState('');
   const [detailsText3,setDetailsText3] =useState('');
   const [descriptionB1, setDescriptionB1]=useState('');
+  const [originLatitude, setOriginLatitude]=useState('');
+  const [originLongitude, setOriginLongitude]=useState('');
+  const [geocodedCoordinates, setGeocodedCoordinates]=useState(null);
+  const [geocodedCoordinates1, setGeocodedCoordinates1]=useState(null);
+  const [geocodedCoordinates2, setGeocodedCoordinates2]=useState(null);
+  const [destLatitude, setDestLatitude] =useState('');
+  const [destLongitude, setDestLongitude] =useState('');
+
+  const origin = {
+    latitude: parseFloat(originLatitude),
+    longitude: parseFloat(originLongitude),
+  };
+
+  const destination = {
+    latitude: parseFloat(destLatitude),
+    longitude: parseFloat(destLongitude),
+  };
 
   const handleSearch = () => {
     const data = {
@@ -59,6 +76,13 @@ export default function CardPageG( { route, navigation } ) {
         setDetailsText1(info['detailsText1'])
         setDetailsText2(info['detailsText2'])
         setDetailsText3(info['detailsText3'])
+        setOriginLatitude(info['originLatitude'])
+        setOriginLongitude(info['originLongitude'])
+        setGeocodedCoordinates(info['geocodedCoordinates'])
+        setGeocodedCoordinates1(info['geocodedCoordinates1'])
+        setGeocodedCoordinates2(info['geocodedCoordinates2'])
+        
+
       })
       .catch((error) => {
         console.log('Error occurred during search:', error);
@@ -105,13 +129,13 @@ export default function CardPageG( { route, navigation } ) {
         
       </View>
       <View style={styles.mapGG}>
-          <MapG/>
+          
       </View>
       <View style={styles.mapGG}>
-          <MapG/>
+      <MapG origin={{latitude:originLatitude, longitude:originLongitude}} destination={geocodedCoordinates}/>
       </View>
       <View style={styles.mapGG}>
-          <MapG/>
+      <MapG origin={{latitude:originLatitude, longitude:originLongitude}} destination={geocodedCoordinates2}/>
       </View>
         
       </View>
