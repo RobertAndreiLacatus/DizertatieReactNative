@@ -4,3 +4,5 @@ export const API_URL = 'http://192.168.0.100:5000'
 
 //when you run backend, run with this flask run --host=0.0.0.0
 
+
+
